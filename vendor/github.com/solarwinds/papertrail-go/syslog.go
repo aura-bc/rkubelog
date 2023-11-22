@@ -139,7 +139,8 @@ func (s *SrslogShipper) Write(packet *SyslogPacket) (err error) {
 		tag = fmt.Sprintf("%s - %s", s.tag, tag)
 	}
 
-	timestamp := ts.Format(time.RFC3339)
+	// timestamp := ts.Format(time.RFC3339)
+
 	// // r19
 	// msg := fmt.Sprintf("<%d>%d %s %s %s - - - %s",
 	// 	packet.Severity, 1, timestamp, packet.Hostname, tag, packet.Message)
@@ -152,7 +153,10 @@ func (s *SrslogShipper) Write(packet *SyslogPacket) (err error) {
 
 	// msg := fmt.Sprintf("%s - %s - %s - %s", packet.Hostname, tag, timestamp, packet.Message)
 
-	msg := fmt.Sprintf("%s - %s - %s - %s", packet.Hostname, tag, timestamp, packet.Message)
+	// msg := fmt.Sprintf("%s - %s - %s - %s", packet.Hostname, tag, timestamp, packet.Message)
+
+	// custom release - aura
+	msg := string(packet.Message)
 
 	_, err = s.writer.WriteWithPriority(packet.Severity, []byte(msg))
 	return err

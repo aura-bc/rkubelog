@@ -5,7 +5,6 @@ package logshipper
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/boz/kail"
@@ -39,9 +38,10 @@ func CreatePapertrailShipper(ctx context.Context, paperTrailProtocol, paperTrail
 func (l *PapertrailShipper) Log(ev kail.Event) error {
 	if l.papertrailShipperInst != nil && ev != nil && len(ev.Log()) > 0 {
 		payload := &papertrailgo.Payload{
-			Hostname: fmt.Sprintf("%s/%s", ev.Source().Namespace(), ev.Source().Container()),
-			Tag:      fmt.Sprintf("rkubelog/node(%s)/pod(%s)", ev.Source().Node(), ev.Source().Name()),
-			Log:      string(ev.Log()),
+			Hostname: string(ev.Source().Container()),
+			Tag:      string(""),
+			// Tag:      string(ev.Source().Name()),
+			Log: string(ev.Log()),
 		}
 		return l.papertrailShipperInst.Log(payload)
 	}
