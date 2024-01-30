@@ -109,10 +109,6 @@ func (s *SrslogShipper) Write(packet *SyslogPacket) (err error) {
 		return err
 	}
 
-	// s.writer.SetHostname(packet.Hostname)
-	// s.writer.SetFormatter(s.Formatter)
-	// s.writer.SetFormatter(syslog.RFC5424Formatter)
-
 	switch {
 	case s.protocol == UDP:
 		defer func() {
@@ -131,32 +127,12 @@ func (s *SrslogShipper) Write(packet *SyslogPacket) (err error) {
 		ts = time.Now()
 	}
 
-	// msg := fmt.Sprintf("<%d> %s %s %s %s - - - %s", packet.Severity, ts.Format(rfc5424time), packet.Hostname, s.tag, packet.Tag, packet.Message)
-	// var msg string
-
 	tag := packet.Tag
 	if s.tag != "" {
 		tag = fmt.Sprintf("%s - %s", s.tag, tag)
 	}
 
-	// timestamp := ts.Format(time.RFC3339)
-
-	// // r19
-	// msg := fmt.Sprintf("<%d>%d %s %s %s - - - %s",
-	// 	packet.Severity, 1, timestamp, packet.Hostname, tag, packet.Message)
-
-	// r17
-	// msg = fmt.Sprintf("%s %s %s - %s", packet.Hostname, s.tag, packet.Tag, packet.Message)
-
-	// works, get IP
-	// msg := fmt.Sprintf("%s %s - - - %s", packet.Hostname, tag, packet.Message)
-
-	// msg := fmt.Sprintf("%s - %s - %s - %s", packet.Hostname, tag, timestamp, packet.Message)
-
-	// msg := fmt.Sprintf("%s - %s - %s - %s", packet.Hostname, tag, timestamp, packet.Message)
-
-	// custom release - aura
-	msg := string(packet.Message)
+	msg := fmt.Sprintf("%s - %s", tag, packet.Message)
 
 	_, err = s.writer.WriteWithPriority(packet.Severity, []byte(msg))
 	return err

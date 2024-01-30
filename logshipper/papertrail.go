@@ -39,9 +39,8 @@ func (l *PapertrailShipper) Log(ev kail.Event) error {
 	if l.papertrailShipperInst != nil && ev != nil && len(ev.Log()) > 0 {
 		payload := &papertrailgo.Payload{
 			Hostname: string(ev.Source().Container()),
-			Tag:      string(""),
-			// Tag:      string(ev.Source().Name()),
-			Log: string(ev.Log()),
+			Tag:      string(ev.Source().Name()),
+			Log:      string(ev.Log()),
 		}
 		return l.papertrailShipperInst.Log(payload)
 	}
